@@ -13,8 +13,8 @@ def lsb (target, data):
     """
     Embeded data to LSB of target
     ex: target='101010', data='111', return '101111'
-    :param target: string <binnary>
-    :param data: string <binnary>
+    :param target: string <binary>
+    :param data: string <binary>
     :returns: string
     """
     s1 = str(target)
@@ -46,8 +46,8 @@ def optimal_lsb (target, data):
     """
     Embeded data to LSB of target using Optimal LSB algorihm
     ex: target='101001', data='111', return '100111' not '101111'
-    :param target: string <binnary>
-    :param data: string <binnary>
+    :param target: string <binary>
+    :param data: string <binary>
     :returns: int
     """
     p = bin2dec(target)
@@ -73,7 +73,7 @@ def embed_str (filename, s):
     """
     Embeded string to image file.
     :param filename: string <file name with extension (ex. 'graybird.png')>
-    :param s: string <binnary without white space>
+    :param s: string <binary without white space>
     :returns: PIL.Image <grayscale>
     """
     list_data = sliced(s, 3)
@@ -99,8 +99,8 @@ def embed_str (filename, s):
 def stego (list_of_image, list_of_lsb):
     """
     Apply Optimal LSB algorihm to list of image
-    :param list_of_image: list <string binnary>
-    :param list_of_lsb: list <string binnary>
+    :param list_of_image: list <string binary>
+    :param list_of_lsb: list <string binary>
     :returns: list <integer>
     """
     m = list_of_image
@@ -155,7 +155,7 @@ def lsb_from_array (arr, n):
 def lsb_from_list_bin (l, n):
     """
     Get LSB with lenght=n from each element of list string
-    :param l: list <string with binnary number>
+    :param l: list <string with binary number>
     :param n: integer <lenght of lsb>
     :returns: list of LSB <string>
     """
@@ -184,7 +184,7 @@ def lsb_from_list_int (l, n):
 
 def dec2bin (x):
     """
-    Convert integer to binnary value
+    Convert integer to binary value
     :param x: integer
     :returns: string
     """
@@ -193,7 +193,7 @@ def dec2bin (x):
 
 def bin2dec (s):
     """
-    Convert binnary value to integer
+    Convert binary value to integer
     :param s: string
     :returns: integer
     """
@@ -264,7 +264,7 @@ def nearest (list, value):
 
 def img2str (filename):
     """
-    Convert an image grayscale to a string with binnary number 8 bit
+    Convert an image grayscale to a string with binary number 8 bit
     :param filename: string <file name with extension (ex. 'bird.png')>
     :returns: string
     """
@@ -280,11 +280,11 @@ def img2str (filename):
 
 def img2list_bin (filename):
     """
-    Convert an image grayscale to a list string with binnary number 8 bit
+    Convert an image grayscale to a list string with binary number 8 bit
     :param filename: string <file name with extension (ex. 'bird.png')>
     :returns: list <string>
     """
-    img = image.open(filename)
+    img = image.open(filename).convert('L')
     arr = np.array(img)
     result = []
     for i in range(len(arr)):
@@ -330,7 +330,7 @@ def img_save(filename, arr):
 
 def list2bin (l):
     """
-    Convert list of integer to list of string binnary
+    Convert list of integer to list of string binary
     :param l: list <integer>
     :returns: list <string 8 bit>
     """
@@ -354,12 +354,12 @@ def list2str(l):
 
 
 # convert array 2 dimension to list
-# return as binnary
+# return as binary
 def array2list(arr):
     """
     Convert array 2D to a list
     :param arr: array 2D
-    :returns: list <string binnary>
+    :returns: list <string binary>
     """
     l = []
     for i in range(len(arr)):
@@ -374,7 +374,7 @@ def list2img(l, dim):
     """
     Make grayscale Image <PIL.Image> from list. If lenght of list not enough to make image with dimension = [high]*[width] then just return black imageself.
     Each pixel in image represented as integer with value 0~255 (8bit). If list given not 8 bit then the list is convert to a string and sliced to 8 bit of each element, it make the lenght of list may reducedself.
-    :param l: list <string binnary>
+    :param l: list <string binary>
     :param dim: [high, width] <integer> (ex. dim=[100, 200]) or just [width] if width==high
     :returns: PIL.Image
     """
@@ -404,6 +404,34 @@ def list2img(l, dim):
             m[i,j] = dec
     img = image.fromarray(m)
     return img
+
+
+def str2list_bin (string):
+    """
+    Convert String to list <string binary>
+    :param string: string
+    :returns: list <string binary>
+    """
+    result = []
+    arr = bytearray(string, encoding = 'utf-8')
+    for i in arr:
+        value = set8bit(dec2bin(i))
+        result.append(value)
+    return result
+
+
+def list_bin2str (l):
+    """
+    Convert List <string binary> to a string
+    :param l: list <string binary>
+    :returns: string
+    """
+    result = ''
+    for i in l:
+        dec = bin2dec(i)
+        value = chr(dec)
+        result = result + str(value)
+    return result
 
 
 def printlist (l):
